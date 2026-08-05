@@ -1,0 +1,1509 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="ink">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="杨圣旦的个人网站｜AI 产品经理、AI 应用交付与产品型 FDE 方向" />
+  <meta name="color-scheme" content="dark light" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230c1119'/%3E%3Cpath d='M16 17h32M16 31h22M16 45h28' stroke='%23d7ff64' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <title>杨圣旦｜AI Product Fieldbook</title>
+  <style>
+    :root {
+      --bg: #0c1119;
+      --bg-elevated: #111824;
+      --panel: rgba(255, 255, 255, 0.035);
+      --panel-strong: rgba(255, 255, 255, 0.065);
+      --text: #edf2f7;
+      --muted: #9da9ba;
+      --muted-2: #6f7b8e;
+      --line: rgba(231, 238, 248, 0.14);
+      --line-strong: rgba(231, 238, 248, 0.24);
+      --accent: #d7ff64;
+      --accent-ink: #11160b;
+      --signal: #8cb4ff;
+      --warning: #ffc96c;
+      --danger: #ff8c8c;
+      --ok: #7ee2b8;
+      --max: 1240px;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+      --font-display: "Iowan Old Style", "Noto Serif SC", "Songti SC", Georgia, serif;
+      --font-sans: "Avenir Next", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    html[data-theme="paper"] {
+      --bg: #f1efe9;
+      --bg-elevated: #fbfaf7;
+      --panel: rgba(10, 17, 25, 0.035);
+      --panel-strong: rgba(10, 17, 25, 0.065);
+      --text: #111721;
+      --muted: #586272;
+      --muted-2: #7b8491;
+      --line: rgba(18, 24, 35, 0.14);
+      --line-strong: rgba(18, 24, 35, 0.25);
+      --accent: #244b2f;
+      --accent-ink: #f4f8ed;
+      --signal: #315a9c;
+      --warning: #9c5e00;
+      --danger: #9e3b3b;
+      --ok: #1f7459;
+      --shadow: 0 18px 42px rgba(48, 43, 31, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.02), transparent 22rem),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.23;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.14'/%3E%3C/svg%3E");
+      mix-blend-mode: soft-light;
+      z-index: -1;
+    }
+
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
+    img, svg { display: block; max-width: 100%; }
+    ::selection { background: var(--accent); color: var(--accent-ink); }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+
+    .skip-link {
+      position: fixed;
+      left: 16px;
+      top: 16px;
+      z-index: 1000;
+      transform: translateY(-160%);
+      background: var(--accent);
+      color: var(--accent-ink);
+      padding: 10px 14px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 750;
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .site-shell {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(18px);
+      background: color-mix(in srgb, var(--bg) 84%, transparent);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .brand-label { white-space: nowrap; }
+
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: 50%;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent);
+      background: var(--panel);
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .topnav a,
+    .icon-button {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 9px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .topnav a:hover,
+    .icon-button:hover { color: var(--text); background: var(--panel-strong); }
+
+    .hero {
+      min-height: calc(100vh - 69px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.7fr);
+      align-items: end;
+      gap: clamp(48px, 8vw, 112px);
+      padding: clamp(80px, 11vw, 156px) 0 52px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow,
+    .section-kicker,
+    .mono-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.4;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted-2);
+    }
+
+    .hero h1 {
+      max-width: 920px;
+      margin: 18px 0 24px;
+      font-family: var(--font-display);
+      font-size: clamp(48px, 7.4vw, 104px);
+      line-height: 0.98;
+      letter-spacing: -0.065em;
+      font-weight: 720;
+    }
+
+    .hero-role {
+      max-width: 780px;
+      margin: -8px 0 18px;
+      font-family: var(--font-display);
+      font-size: clamp(24px, 3vw, 40px);
+      line-height: 1.15;
+      letter-spacing: -0.035em;
+    }
+
+    .hero h1 .pill-word {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      padding: 0.04em 0.22em 0.08em;
+      letter-spacing: -0.055em;
+      white-space: nowrap;
+    }
+
+    .hero-summary {
+      max-width: 790px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.55;
+      letter-spacing: -0.018em;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 34px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      gap: 9px;
+      padding: 10px 15px;
+      border-radius: 999px;
+      border: 1px solid var(--line-strong);
+      color: var(--text);
+      background: transparent;
+      text-decoration: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+      white-space: nowrap;
+    }
+    .button:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--accent) 65%, var(--line-strong)); }
+    .button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+    .button.ghost { color: var(--muted); }
+    .button.pending-control { cursor: not-allowed; opacity: 0.58; }
+
+    .hero-rail {
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 18px;
+    }
+
+    .signal-card {
+      border-top: 1px solid var(--line-strong);
+      padding-top: 14px;
+    }
+    .signal-card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .signal-card p { margin: 7px 0 0; color: var(--muted); font-size: 14px; }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 28px;
+      padding: 4px 9px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.02em;
+      color: var(--muted);
+      background: var(--panel);
+      white-space: normal;
+      line-height: 1.35;
+    }
+    .status::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 12%, transparent);
+    }
+    .status.live,
+    .status.reachable { color: var(--ok); }
+    .status.external { color: var(--signal); }
+    .status.recording { color: #c29cff; }
+    .status.replay { color: var(--signal); }
+    .status.offline { color: var(--warning); }
+    .status.pending { color: var(--muted-2); }
+
+    section { scroll-margin-top: 86px; }
+    .section {
+      padding: clamp(84px, 10vw, 138px) 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(180px, 0.42fr) minmax(0, 1fr);
+      gap: clamp(28px, 8vw, 100px);
+      align-items: start;
+      margin-bottom: 48px;
+    }
+    .section-heading h2 {
+      margin: 0;
+      max-width: 880px;
+      font-family: var(--font-display);
+      font-size: clamp(34px, 5vw, 64px);
+      line-height: 1.04;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+    }
+    .section-heading p {
+      margin: 16px 0 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .personal-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.55fr);
+      gap: clamp(32px, 8vw, 110px);
+      align-items: start;
+    }
+    .personal-intro {
+      max-width: 820px;
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(26px, 3.5vw, 48px);
+      line-height: 1.25;
+      letter-spacing: -0.035em;
+    }
+    .personal-intro em {
+      color: var(--accent);
+      font-style: normal;
+    }
+    .now-panel {
+      border-top: 1px solid var(--line-strong);
+      padding-top: 16px;
+    }
+    .now-panel strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 18px;
+      line-height: 1.45;
+    }
+    .now-panel p,
+    .now-panel ul { color: var(--muted); }
+    .now-panel ul { margin: 18px 0 0; padding-left: 18px; }
+    .profile-facts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 44px;
+    }
+    .profile-fact {
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+    .profile-fact small,
+    .experience-time { color: var(--muted-2); font-family: var(--font-mono); font-size: 12px; }
+    .profile-fact strong { display: block; margin-top: 8px; font-size: 15px; line-height: 1.5; }
+
+    .experience-list { border-top: 1px solid var(--line); }
+    .experience-item {
+      display: grid;
+      grid-template-columns: minmax(150px, 0.34fr) minmax(0, 1fr);
+      gap: clamp(24px, 7vw, 92px);
+      padding: 30px 0 34px;
+      border-bottom: 1px solid var(--line);
+    }
+    .experience-main h3 { margin: 0; font-size: clamp(23px, 3vw, 34px); line-height: 1.15; letter-spacing: -0.035em; }
+    .experience-main p { max-width: 780px; margin: 12px 0 0; color: var(--muted); }
+    .experience-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .experience-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 22px; }
+    .experience-metric { border-top: 1px solid var(--line); padding-top: 10px; }
+    .experience-metric strong { display: block; margin-top: 6px; font-size: 14px; line-height: 1.45; }
+    .experience-metric small { color: var(--muted-2); font-family: var(--font-mono); font-size: 11px; }
+
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .filter-button {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    .filter-button:hover,
+    .filter-button[aria-pressed="true"] {
+      color: var(--text);
+      background: var(--panel-strong);
+      border-color: var(--line-strong);
+    }
+
+    .work-list { border-top: 1px solid var(--line); }
+    .project {
+      display: grid;
+      grid-template-columns: minmax(180px, 0.46fr) minmax(0, 1fr);
+      gap: clamp(28px, 7vw, 92px);
+      padding: 42px 0 48px;
+      border-bottom: 1px solid var(--line);
+      transition: opacity 180ms ease;
+    }
+    .project[hidden] { display: none; }
+    .project-index {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      color: var(--muted);
+    }
+    .project-index .number { font-family: var(--font-mono); color: var(--accent); }
+    .project-index .type { font-size: 14px; }
+    .project-main h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+    }
+    .project-main .dek {
+      margin: 14px 0 0;
+      max-width: 820px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+    .project-meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .meta-box {
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+    .meta-box small { display: block; color: var(--muted-2); font-family: var(--font-mono); }
+    .meta-box strong { display: block; margin-top: 6px; font-size: 14px; line-height: 1.5; }
+
+    .case-tabs {
+      margin-top: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: clip;
+      background: var(--panel);
+    }
+    .tab-list {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      padding: 8px;
+      border-bottom: 1px solid var(--line);
+      scrollbar-width: thin;
+    }
+    .tab-button {
+      flex: 0 0 auto;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      padding: 8px 11px;
+      cursor: pointer;
+    }
+    .tab-button[aria-selected="true"] { background: var(--panel-strong); color: var(--text); }
+    .tab-panel { display: none; padding: 20px; }
+    .tab-panel.active { display: block; }
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .case-cell {
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+    .case-cell h4 {
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-2);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .case-cell p,
+    .case-cell ul { margin: 8px 0 0; color: var(--muted); }
+    .case-cell ul { padding-left: 18px; }
+
+    .media-placeholder {
+      min-height: 230px;
+      display: grid;
+      place-items: center;
+      margin: 0;
+      padding: 24px;
+      border: 1px dashed var(--line-strong);
+      border-radius: var(--radius-sm);
+      background:
+        linear-gradient(135deg, transparent 0 48%, var(--line) 48% 49%, transparent 49% 100%),
+        linear-gradient(45deg, transparent 0 48%, var(--line) 48% 49%, transparent 49% 100%);
+      background-size: 28px 28px;
+      text-align: center;
+    }
+    .media-placeholder strong { display: block; font-size: 17px; }
+    .media-placeholder span { display: block; margin-top: 6px; color: var(--muted); }
+
+    .evidence-gallery {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .evidence-card {
+      grid-column: span 4;
+      min-width: 0;
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--bg-elevated);
+    }
+    .evidence-card.wide { grid-column: span 8; }
+    .evidence-card.tall { grid-column: span 3; }
+    .evidence-card img,
+    .evidence-card video {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: #0a0e14;
+    }
+    .evidence-card.tall img { aspect-ratio: 4 / 5; }
+    .evidence-card figcaption { padding: 10px 12px 12px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .evidence-card figcaption strong { display: block; color: var(--text); font-size: 13px; }
+
+    .project-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .proof-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+    .proof-table {
+      display: grid;
+      gap: 10px;
+    }
+    .proof-row {
+      display: grid;
+      grid-template-columns: 1.1fr 0.65fr 0.65fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--panel);
+    }
+    .proof-row[hidden] { display: none; }
+    .proof-row strong { font-size: 15px; }
+    .proof-row span:not(.status) { color: var(--muted); font-size: 14px; }
+    .proof-row a { text-underline-offset: 4px; }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .method-step {
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--panel);
+    }
+    .method-step .step-no { font-family: var(--font-mono); color: var(--accent); }
+    .method-step h3 { margin: 32px 0 8px; font-size: 18px; line-height: 1.3; }
+    .method-step p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .playground {
+      display: grid;
+      grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+      gap: 16px;
+    }
+    .trace-map,
+    .trace-detail {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      overflow: clip;
+    }
+    .trace-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .trace-head h3 { margin: 0; font-size: 17px; }
+    .trace-head span { color: var(--muted); font-family: var(--font-mono); font-size: 12px; }
+    .trace-list {
+      list-style: none;
+      padding: 12px;
+      margin: 0;
+      display: grid;
+      gap: 8px;
+    }
+    .trace-step {
+      width: 100%;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: var(--muted);
+      text-align: left;
+      padding: 13px 14px;
+      cursor: pointer;
+    }
+    .trace-step:hover { background: var(--panel-strong); }
+    .trace-step.active {
+      border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
+      background: color-mix(in srgb, var(--accent) 8%, var(--panel));
+      color: var(--text);
+    }
+    .trace-step small { display: block; margin-bottom: 4px; font-family: var(--font-mono); color: var(--muted-2); }
+    .trace-body { padding: 24px; min-height: 370px; }
+    .trace-body h3 { margin: 8px 0 12px; font-size: clamp(28px, 4vw, 42px); letter-spacing: -0.035em; }
+    .trace-body p { color: var(--muted); max-width: 680px; }
+    .trace-facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .trace-fact { border-top: 1px solid var(--line); padding-top: 12px; }
+    .trace-fact small { display: block; color: var(--muted-2); font-family: var(--font-mono); }
+    .trace-fact strong { display: block; margin-top: 6px; }
+    .trace-controls { display: flex; gap: 10px; margin-top: 28px; }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .note-card {
+      min-height: 240px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+    }
+    .note-card h3 { margin: 42px 0 10px; font-size: 22px; line-height: 1.3; letter-spacing: -0.025em; }
+    .note-card p { color: var(--muted); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.55fr);
+      gap: clamp(40px, 8vw, 100px);
+    }
+    .about-copy {
+      font-size: clamp(22px, 3vw, 36px);
+      line-height: 1.4;
+      letter-spacing: -0.03em;
+      margin: 0;
+    }
+    .about-copy .inline-pill {
+      display: inline-block;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      padding: 0.02em 0.24em 0.08em;
+    }
+    .contact-panel {
+      border-top: 1px solid var(--line-strong);
+      padding-top: 18px;
+    }
+    .contact-panel p { color: var(--muted); }
+    .contact-list { display: grid; gap: 9px; margin-top: 22px; }
+    .contact-list a,
+    .contact-list button,
+    .contact-list .pending-control {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: var(--text);
+      text-decoration: none;
+      padding: 12px 14px;
+      cursor: pointer;
+    }
+    .contact-list a:hover,
+    .contact-list button:hover { background: var(--panel-strong); }
+    .contact-list .pending-control { cursor: not-allowed; opacity: 0.58; }
+    .contact-list small { color: var(--muted-2); }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 34px 0 54px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; padding-top: 100px; }
+      .hero-rail { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .section-heading,
+      .project,
+      .personal-grid,
+      .experience-item { grid-template-columns: 1fr; gap: 24px; }
+      .project-index { flex-direction: row; align-items: center; justify-content: space-between; }
+      .method-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .method-step:last-child { grid-column: 1 / -1; }
+      .playground { grid-template-columns: 1fr; }
+      .notes-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
+      .evidence-card,
+      .evidence-card.wide,
+      .evidence-card.tall { grid-column: span 6; }
+    }
+
+    @media (max-width: 720px) {
+      .site-shell { width: min(calc(100% - 22px), var(--max)); }
+      .topnav a { display: none; }
+      .topnav a:last-of-type { display: inline-flex; }
+      .brand-label { max-width: 76px; overflow: hidden; text-overflow: ellipsis; }
+      .icon-button { width: 40px; height: 40px; padding: 0; font-size: 0; }
+      .icon-button::before { content: "◐"; font-size: 17px; }
+      .hero { padding-top: 72px; }
+      .hero h1 { font-size: clamp(46px, 14vw, 72px); }
+      .hero-summary { font-size: 18px; }
+      .hero-rail { grid-template-columns: 1fr; }
+      .section { padding: 78px 0; }
+      .section-heading { margin-bottom: 34px; }
+      .profile-facts,
+      .experience-metrics { grid-template-columns: 1fr; }
+      .project-meta,
+      .case-grid,
+      .trace-facts { grid-template-columns: 1fr; }
+      .evidence-card,
+      .evidence-card.wide,
+      .evidence-card.tall { grid-column: span 12; }
+      .proof-row { grid-template-columns: 1fr; gap: 8px; }
+      .method-grid { grid-template-columns: 1fr; }
+      .method-step:last-child { grid-column: auto; }
+      .footer { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="topbar">
+    <div class="site-shell topbar-inner">
+      <a class="brand" href="#top" aria-label="返回首页">
+        <span class="brand-mark">YS</span>
+        <span class="brand-label">杨圣旦 · Fieldbook</span>
+      </a>
+      <nav class="topnav" aria-label="主要导航">
+        <a href="#about">关于</a>
+        <a href="#experience">经历</a>
+        <a href="#work">项目</a>
+        <a href="#proof">证据</a>
+        <a href="#method">方法</a>
+        <a href="#playground">交互</a>
+        <a href="#contact">联系</a>
+        <button class="icon-button" id="themeToggle" type="button" aria-label="切换明暗主题">◐ Theme</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="site-shell hero" id="top">
+      <div>
+        <div class="eyebrow">Personal site · AI Product / Application Delivery</div>
+        <h1>杨圣旦<span class="pill-word">AI 产品</span></h1>
+        <p class="hero-role">把复杂业务问题，转成可验证的 AI 产品与应用交付。</p>
+        <p class="hero-summary">
+          我关注产品判断、用户流程、PRD / 原型、Agent / RAG 应用与评测闭环；用可查看的 Demo、Replay、Artifact 与边界说明，让方案不仅“看起来能做”，而是能够被复查、被验证、被继续推进。
+        </p>
+        <div class="hero-actions" aria-label="快捷入口">
+          <a class="button primary" href="#about">认识我 ↘</a>
+          <a class="button" href="#work">查看 Selected Work</a>
+          <a class="button" href="https://ai-pm-studio-cn-280236-7-1452182285.sh.run.tcloudbase.com/agent-demo" target="_blank" rel="noreferrer">打开 Replay ↗</a>
+          <a class="button ghost" href="https://github.com/zenoyang-ai" target="_blank" rel="noreferrer">GitHub ↗</a>
+          <span class="button ghost pending-control" role="status" aria-label="Resume PDF 待补">Resume · 待补</span>
+          <a class="button ghost" href="mailto:2574720892@qq.com">联系我 ↗</a>
+        </div>
+        <div class="legend" aria-label="证据状态图例">
+          <span class="status reachable">Reachable demo / site</span>
+          <span class="status replay">Replay</span>
+          <span class="status offline">Offline validation</span>
+          <span class="status pending">Pending evidence</span>
+        </div>
+      </div>
+
+      <aside class="hero-rail" aria-label="求职信号摘要">
+        <div class="signal-card">
+          <span class="mono-label">01 / Product judgment</span>
+          <strong>从问题与边界出发，不先堆模型名。</strong>
+          <p>优先说明用户、场景、关键决策和验证方式。</p>
+        </div>
+          <div class="signal-card">
+            <span class="mono-label">02 / Delivery signal</span>
+            <strong>用可运行入口和交付物证明推进能力。</strong>
+            <p>公开入口按可访问 Demo、Replay、离线验证和待补证据区分。</p>
+          </div>
+        <div class="signal-card">
+          <span class="mono-label">03 / Honest boundary</span>
+          <strong>FDE 是相邻方向，不冒充充分现场交付经验。</strong>
+          <p>不虚构生产监控、SLA、商业结果或大规模在线使用。</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="about">
+      <div class="site-shell">
+        <div class="section-heading">
+          <div class="section-kicker">About / 01</div>
+          <div>
+            <h2>一个把产品问题落成应用的人。</h2>
+            <p>这个网站是我的个人工作台：这里有项目，也有我如何判断问题、组织证据、做出取舍和继续学习的轨迹。</p>
+          </div>
+        </div>
+        <div class="personal-grid">
+          <p class="personal-intro">我从内容与业务场景出发，逐步走向 <em>AI 产品定义、应用交付与质量闭环</em>。我喜欢把模糊需求拆成用户流程、可运行原型、评测标准和下一步决策。</p>
+          <aside class="now-panel">
+            <span class="mono-label">Now / Open to</span>
+            <strong>AI 产品经理 / AI 应用产品经理</strong>
+            <p>相邻方向：产品型 FDE、AI 应用交付、解决方案。</p>
+            <ul>
+              <li>3 年工作经验 · 2 年 AI 项目实践</li>
+              <li>关注 Agent、RAG、工作流与模型评测</li>
+              <li>可用 Demo、Replay 和 Artifact 说明工作</li>
+            </ul>
+            <a class="button" href="#experience">查看工作经历 ↓</a>
+          </aside>
+        </div>
+        <div class="profile-facts" aria-label="个人工作信号">
+          <div class="profile-fact"><small>Strength / 01</small><strong>产品方案与原型验证</strong></div>
+          <div class="profile-fact"><small>Strength / 02</small><strong>Agent / RAG 应用与效果优化</strong></div>
+          <div class="profile-fact"><small>Strength / 03</small><strong>评测、Badcase 与人工复核闭环</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="experience">
+      <div class="site-shell">
+        <div class="section-heading">
+          <div class="section-kicker">Experience / 02</div>
+          <div>
+            <h2>先在真实业务里理解问题，再把方法带进个人项目。</h2>
+            <p>工作经历承担“我在什么场景里做过什么”的证明，个人项目承担“我能把它继续做深”的证明；两者不混写。</p>
+          </div>
+        </div>
+        <div class="experience-list">
+          <article class="experience-item">
+            <div class="experience-time">2026.03 — 2026.06</div>
+            <div class="experience-main">
+              <h3>软通动力信息技术服务有限公司（字节跳动外包）</h3>
+              <div class="experience-meta"><span class="status reachable">Work experience</span><span class="status offline">GUI / MCP · Model evaluation</span></div>
+              <p>围绕手机 Agent 的 GUI/MCP 规则、真机多轮评测与 RL 数据质量，重构协同规则，维护标注与质检 SOP，搭建九节点自动化质检工作流，并把人机分歧样本回流到 Prompt、字段映射和处置规则。</p>
+              <div class="experience-metrics">
+                <div class="experience-metric"><small>最终交付</small><strong>2000+ 条 RL 训练数据</strong></div>
+                <div class="experience-metric"><small>内部抽检</small><strong>合格率 97.5%</strong></div>
+                <div class="experience-metric"><small>人工仍在环</small><strong>25 条 → 37 条 / 日</strong></div>
+              </div>
+            </div>
+          </article>
+          <article class="experience-item">
+            <div class="experience-time">2024.07 — 2026.01</div>
+            <div class="experience-main">
+              <h3>广州择智好贸易有限公司 · 项目助理（AI 产品方向）</h3>
+              <div class="experience-meta"><span class="status reachable">Work experience</span><span class="status recording">Agent / RAG / Workflow</span></div>
+              <p>参与从 0 到 1 设计内部跨境电商运营 Agent、RAG 知识助手和 Listing 多平台适配工具；把运营 SOP 拆成任务链、工具调用、规则检查和人工确认，让 AI 输出能进入业务流程而不是停在聊天里。</p>
+              <div class="experience-metrics">
+                <div class="experience-metric"><small>项目复盘估算</small><strong>缺货率约下降 22%</strong></div>
+                <div class="experience-metric"><small>团队结果</small><strong>单店运营人效约提升 40%</strong></div>
+                <div class="experience-metric"><small>知识助手</small><strong>客服处理时长缩短 45%</strong></div>
+              </div>
+            </div>
+          </article>
+          <article class="experience-item">
+            <div class="experience-time">2023.04 — 2024.06</div>
+            <div class="experience-main">
+              <h3>河南梦尔达科技有限公司 · 新媒体内容运营</h3>
+              <div class="experience-meta"><span class="status reachable">Earlier experience</span><span class="status offline">Content / User insight</span></div>
+              <p>从用户评论、内容结构和 CTR / CVR 数据中提炼问题，沉淀内容 SOP，并通过 A/B 测试持续迭代选题和转化路径。这段经历构成了我现在做产品需求与用户洞察的业务底色。</p>
+              <div class="experience-metrics">
+                <div class="experience-metric"><small>高表现内容</small><strong>万赞 5 篇 · 千赞 13 篇</strong></div>
+                <div class="experience-metric"><small>单篇表现</small><strong>阅读量 400 万+</strong></div>
+                <div class="experience-metric"><small>业务结果</small><strong>GMV 50 万+</strong></div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="work">
+      <div class="site-shell">
+        <div class="section-heading">
+          <div class="section-kicker">Selected Work / 03</div>
+          <div>
+            <h2>不是截图墙，而是四份可以被追问的产品档案。</h2>
+            <p>作品集是这份个人网站的主轴，但不是全部身份。每个案例按 Problem → Decision → Artifact → Evidence → Boundary 展开，图片与录屏只作为可复查的证据，不替代个人贡献说明。</p>
+          </div>
+        </div>
+
+        <div class="filter-bar" aria-label="项目筛选">
+          <button class="filter-button" type="button" data-filter="all" aria-pressed="true">全部</button>
+          <button class="filter-button" type="button" data-filter="agent">Agent / Product</button>
+          <button class="filter-button" type="button" data-filter="eval">Evaluation / Workflow</button>
+          <button class="filter-button" type="button" data-filter="rag">Knowledge / RAG</button>
+          <button class="filter-button" type="button" data-filter="finetune">SFT / LoRA</button>
+        </div>
+
+        <div class="work-list">
+          <article class="project" data-category="agent">
+            <aside class="project-index">
+              <span class="number">01</span>
+              <span class="type">AI 产品定义 · 多角色 Agent</span>
+            </aside>
+            <div class="project-main">
+              <div class="legend"><span class="status replay">Replay-only · 不调用模型</span><span class="status recording">Local Live recording</span></div>
+              <h3>AI PM Studio｜五角色 Agent 工作台</h3>
+              <p class="dek">把产品方案形成过程做成可查看的五角色交接、返工与导出链路；公开入口为流程回放，不暗示在线模型调用或多人生产系统。</p>
+              <div class="project-meta">
+                <div class="meta-box"><small>Primary signal</small><strong>产品流程、阶段编排与人工 Gate</strong></div>
+                <div class="meta-box"><small>Public proof</small><strong>公开 Replay + 本地全链路录屏</strong></div>
+                <div class="meta-box"><small>Boundary</small><strong>公开交付为 Replay-only，不是公网生产系统</strong></div>
+              </div>
+
+              <div class="case-tabs" data-tabs>
+                <div class="tab-list" role="tablist" aria-label="AI PM Studio 案例信息">
+                  <button class="tab-button" id="ai-pm-tab-case" role="tab" aria-selected="true" aria-controls="ai-pm-panel-case" tabindex="0">Case</button>
+                  <button class="tab-button" id="ai-pm-tab-evidence" role="tab" aria-selected="false" aria-controls="ai-pm-panel-evidence" tabindex="-1">Evidence</button>
+                  <button class="tab-button" id="ai-pm-tab-boundary" role="tab" aria-selected="false" aria-controls="ai-pm-panel-boundary" tabindex="-1">Boundary</button>
+                </div>
+                <div class="tab-panel active" id="ai-pm-panel-case" role="tabpanel" aria-labelledby="ai-pm-tab-case">
+                  <div class="case-grid">
+                    <div class="case-cell"><h4>Problem</h4><p>AI 产品从想法走向原型时，需求、研究和产品方案容易混在一次对话里，产物难以分步审阅与修改。</p></div>
+                    <div class="case-cell"><h4>Decision</h4><p>独立定义需求、研究、产品、原型和评审五角色；前序产物传递到下一阶段，并在入口和评审处保留人工 Gate。</p></div>
+                    <div class="case-cell"><h4>Artifact</h4><p>本地可运行工作台、结构化阶段产物、沙箱 HTML 原型、运行记录与导出链路。</p></div>
+                    <div class="case-cell"><h4>Evidence</h4><p>公开 Replay 可查看五角色交接、返工与导出；本地记录曾跑通模型 API 与 Hermes Web 检索全链路。</p></div>
+                  </div>
+                </div>
+                <div class="tab-panel" id="ai-pm-panel-evidence" role="tabpanel" aria-labelledby="ai-pm-tab-evidence" hidden>
+                  <div class="evidence-gallery">
+                    <figure class="evidence-card wide"><img src="assets/ai-pm-studio-overview.png" alt="AI PM Studio 五角色 Agent 工作台入口，左侧运行产品想法，右侧查看固化演示案例" loading="lazy"><figcaption><strong>产品入口</strong>从产品想法到可验证原型的五角色交付链路。</figcaption></figure>
+                    <figure class="evidence-card"><video controls preload="metadata" poster="assets/ai-pm-studio-overview.png"><source src="assets/ai-pm-studio-live.mp4" type="video/mp4">你的浏览器不支持本地视频。</video><figcaption><strong>本地 Live 录屏</strong>单次全链路记录；不等于公开环境实时运行。</figcaption></figure>
+                  </div>
+                </div>
+                <div class="tab-panel" id="ai-pm-panel-boundary" role="tabpanel" aria-labelledby="ai-pm-tab-boundary" hidden>
+                  <div class="case-grid">
+                    <div class="case-cell"><h4>Verified</h4><ul><li>五角色阶段链路与结构化产物。</li><li>公开入口为固化流程回放。</li><li>核心流程与导出路径已验收。</li></ul></div>
+                    <div class="case-cell"><h4>Not claimed</h4><ul><li>不主张公网多人生产运行。</li><li>不主张公开入口实时调用模型。</li><li>不主张真实客户、SLA 或商业结果。</li></ul></div>
+                  </div>
+                </div>
+              </div>
+              <div class="project-links"><a class="button primary" href="https://ai-pm-studio-cn-280236-7-1452182285.sh.run.tcloudbase.com/agent-demo" target="_blank" rel="noreferrer">打开流程回放 ↗</a><a class="button" href="#playground">体验 Sample Trace ↓</a></div>
+            </div>
+          </article>
+
+          <article class="project" data-category="eval">
+            <aside class="project-index">
+              <span class="number">02</span>
+              <span class="type">评测闭环 · 自动化工作流</span>
+            </aside>
+            <div class="project-main">
+              <div class="legend"><span class="status reachable">Reachable demo · 可视化看板</span><span class="status external">External workflow page</span></div>
+              <h3>自动化质检｜AI 工作流与可视化看板</h3>
+              <p class="dek">把自动化质检链路做成可浏览的流程看板，并保留 Coze 工作流开发页作为实现侧证据；当前仅呈现演示与开发入口，不外推为生产部署。</p>
+              <div class="project-meta">
+                <div class="meta-box"><small>Primary signal</small><strong>规则拆解、质量判断与自动化交付</strong></div>
+                <div class="meta-box"><small>Public proof</small><strong>演示看板 + Coze 工作流开发页</strong></div>
+                <div class="meta-box"><small>Boundary</small><strong>不外推为生产部署、用户规模或 SLA</strong></div>
+              </div>
+
+              <div class="case-tabs" data-tabs>
+                <div class="tab-list" role="tablist" aria-label="自动化质检案例信息">
+                  <button class="tab-button" id="qa-tab-case" role="tab" aria-selected="true" aria-controls="qa-panel-case" tabindex="0">Case</button>
+                  <button class="tab-button" id="qa-tab-evidence" role="tab" aria-selected="false" aria-controls="qa-panel-evidence" tabindex="-1">Evidence</button>
+                  <button class="tab-button" id="qa-tab-boundary" role="tab" aria-selected="false" aria-controls="qa-panel-boundary" tabindex="-1">Boundary</button>
+                </div>
+                <div class="tab-panel active" id="qa-panel-case" role="tabpanel" aria-labelledby="qa-tab-case">
+                  <div class="case-grid">
+                    <div class="case-cell"><h4>Problem</h4><p>RL 数据存在图文不一致、步骤判定分歧等问题，质检规则和判断链需要从人工 SOP 变成可复查的工作流。</p></div>
+                    <div class="case-cell"><h4>Decision</h4><p>确定性字段交给代码规则，截图状态交给 VLM，任务目标与轨迹的一致性由 LLM 辅助判断，最终保留完整人工复核。</p></div>
+                    <div class="case-cell"><h4>Ownership</h4><p>直接贡献是规则拆解、九节点工作流搭建、Prompt/字段映射和人机分歧样本迭代；模型训练与项目整体结果由团队共同完成。</p></div>
+                    <div class="case-cell"><h4>Result</h4><p>交付 2000+ 条 RL 训练数据；内部抽检合格率 97.5%，机器预检与人工最终判定一致率 90%，单人日均质检产能 25 条提升至 37 条，仍保留人工复核。</p></div>
+                  </div>
+                </div>
+                <div class="tab-panel" id="qa-panel-evidence" role="tabpanel" aria-labelledby="qa-tab-evidence" hidden>
+                  <div class="evidence-gallery">
+                    <figure class="evidence-card wide"><img src="assets/qa-workflow-board.png" alt="AI 标注质检工作流可视化看板，显示九节点质检路径、异常节点和最终结论" loading="lazy"><figcaption><strong>九节点质检路径</strong>公开演示看板中的流程、异常和 Verify 一致性检查。</figcaption></figure>
+                    <figure class="evidence-card"><img src="assets/qa-workflow-builder.png" alt="AI 质检工作流编辑器，显示字段解析、Prompt 状态分流和正常异常分支" loading="lazy"><figcaption><strong>工作流编排</strong>节点、分支与人工复核前的自动化结构。</figcaption></figure>
+                    <figure class="evidence-card"><img src="assets/qa-workflow-run.png" alt="AI 质检工作流试运行记录，显示节点耗时和 Verify 结果" loading="lazy"><figcaption><strong>试运行记录</strong>可查看节点耗时、结果与失败信息。</figcaption></figure>
+                  </div>
+                </div>
+                <div class="tab-panel" id="qa-panel-boundary" role="tabpanel" aria-labelledby="qa-tab-boundary" hidden>
+                  <div class="case-grid">
+                    <div class="case-cell"><h4>Verified</h4><ul><li>存在可访问演示看板和工作流页。</li><li>九节点质检链路与人工复核边界有明确素材。</li><li>指标范围来自项目工作记录，不是模型准确率。</li></ul></div>
+                    <div class="case-cell"><h4>Not claimed</h4><ul><li>不主张自动化替代人工复核。</li><li>不主张客户现场、生产监控或 SLA。</li><li>不主张 97.5% 是线上长期质量或模型能力。</li></ul></div>
+                  </div>
+                </div>
+              </div>
+              <div class="project-links"><a class="button primary" href="https://ai-qa-workflow-cn-280236-7-1452182285.sh.run.tcloudbase.com/" target="_blank" rel="noreferrer">打开演示看板 ↗</a><a class="button" href="https://code.coze.cn/web-sdk/7637126839198220303" target="_blank" rel="noreferrer">查看工作流页 ↗</a></div>
+            </div>
+          </article>
+
+          <article class="project" data-category="rag">
+            <aside class="project-index">
+              <span class="number">03</span>
+              <span class="type">知识组织 · AI 问答</span>
+            </aside>
+            <div class="project-main">
+              <div class="legend"><span class="status reachable">Reachable site · Web</span><span class="status offline">Offline validation · v5.5.x</span></div>
+              <h3>倪海厦知识图谱｜AI 问答助手</h3>
+              <p class="dek">以网页与小程序形态承载知识图谱和问答入口。当前资料能够确认产品形态与公开网页，不能据此推断知识准确率、医疗有效性或生产级质量。</p>
+              <div class="project-meta">
+                <div class="meta-box"><small>Primary signal</small><strong>信息架构、RAG 与多端交付</strong></div>
+                <div class="meta-box"><small>Public proof</small><strong>Web 主站 + 小程序形态 + GitHub Pages</strong></div>
+                <div class="meta-box"><small>Boundary</small><strong>146/146 是 v5.5.x 本地测试；v5.3.0 是小程序正式版</strong></div>
+              </div>
+
+              <div class="case-tabs" data-tabs>
+                <div class="tab-list" role="tablist" aria-label="倪海厦知识图谱案例信息">
+                  <button class="tab-button" id="nihaixia-tab-case" role="tab" aria-selected="true" aria-controls="nihaixia-panel-case" tabindex="0">Case</button>
+                  <button class="tab-button" id="nihaixia-tab-evidence" role="tab" aria-selected="false" aria-controls="nihaixia-panel-evidence" tabindex="-1">Evidence</button>
+                  <button class="tab-button" id="nihaixia-tab-boundary" role="tab" aria-selected="false" aria-controls="nihaixia-panel-boundary" tabindex="-1">Boundary</button>
+                </div>
+                <div class="tab-panel active" id="nihaixia-panel-case" role="tabpanel" aria-labelledby="nihaixia-tab-case">
+                  <div class="case-grid">
+                    <div class="case-cell"><h4>Problem</h4><p>天纪、人纪资料分散，学习后难以快速定位、串联和复习，需要同时解决知识导航与问答入口的问题。</p></div>
+                    <div class="case-cell"><h4>Decision</h4><p>独立设计“知识图谱总览 → 学习路径 → 知识卡片 → AI 问答”核心路径，搭建五层知识架构。</p></div>
+                    <div class="case-cell"><h4>Artifact</h4><p>Web 主站、微信小程序、知识图谱可视化、问答页、来源治理与 RAG 路由。</p></div>
+                    <div class="case-cell"><h4>Result</h4><p>形成 69 个可视化节点、338 条节点关联，校验 0 条悬空关系；审计 231 项资料，生成 4852 个检索块。</p></div>
+                  </div>
+                </div>
+                <div class="tab-panel" id="nihaixia-panel-evidence" role="tabpanel" aria-labelledby="nihaixia-tab-evidence" hidden>
+                  <div class="evidence-gallery">
+                    <figure class="evidence-card wide"><img src="assets/nihaixia-overview.png" alt="倪海厦知识图谱网站总览，左侧目录显示五层知识架构，顶部显示69个节点" loading="lazy"><figcaption><strong>知识产品总览</strong>从底层框架到案例研读的五层导航。</figcaption></figure>
+                    <figure class="evidence-card wide"><img src="assets/nihaixia-graph.png" alt="倪海厦知识图谱可视化关系图，节点按知识层级着色" loading="lazy"><figcaption><strong>关系图谱</strong>展示节点、层级与关联关系。</figcaption></figure>
+                    <figure class="evidence-card"><img src="assets/nihaixia-qa.png" alt="倪海厦知识库 AI 问答页面，包含推荐问题、回答和学习研究声明" loading="lazy"><figcaption><strong>AI 问答</strong>在知识库范围内回答，并保留学习研究边界。</figcaption></figure>
+                    <figure class="evidence-card tall"><img src="assets/nihaixia-miniprogram-chat.jpg" alt="微信小程序 AI 问答页面，显示问题和回答内容" loading="lazy"><figcaption><strong>多端形态</strong>小程序问答入口与 Web 侧共享产品方向。</figcaption></figure>
+                  </div>
+                </div>
+                <div class="tab-panel" id="nihaixia-panel-boundary" role="tabpanel" aria-labelledby="nihaixia-tab-boundary" hidden>
+                  <div class="case-grid">
+                    <div class="case-cell"><h4>Verified</h4><ul><li>69 个可视化节点、338 条关系、0 条悬空关系。</li><li>v5.5.x 本地自动化回归 146/146。</li><li>微信小程序正式版口径为 v5.3.0。</li></ul></div>
+                    <div class="case-cell"><h4>Not claimed</h4><ul><li>不把本地回归写成线上准确率。</li><li>不把公开网页写成医疗诊断或治疗服务。</li><li>知识来源权利、线上用户规模和长期质量仍需单独说明。</li></ul></div>
+                  </div>
+                </div>
+              </div>
+              <div class="project-links"><a class="button primary" href="https://www.nihaixia-knowledge.xyz/" target="_blank" rel="noreferrer">打开公开网页 ↗</a><a class="button" href="https://github.com/zenoyang-ai/nihaixia-knowledge-graph" target="_blank" rel="noreferrer">查看 GitHub 仓库 ↗</a></div>
+            </div>
+          </article>
+
+          <article class="project" data-category="finetune">
+            <aside class="project-index">
+              <span class="number">04</span>
+              <span class="type">SFT / LoRA · 对话助手</span>
+            </aside>
+            <div class="project-main">
+              <div class="legend"><span class="status external">External chat · Dify</span><span class="status offline">Offline evidence · 55/55</span></div>
+              <h3>阿德勒对话助手｜SFT-LoRA 微调</h3>
+              <p class="dek">围绕亲子教育、职场发展、自我成长、亲密关系和人生意义五类场景，把阿德勒理论转成角色规则、回答结构和禁用语，再用 SFT-LoRA、离线评测与 Dify 原型验证闭环。</p>
+              <div class="project-meta">
+                <div class="meta-box"><small>Primary signal</small><strong>对话产品定义、SFT-LoRA 与评测</strong></div>
+                <div class="meta-box"><small>Public proof</small><strong>外部聊天入口 + 训练 / 评测素材</strong></div>
+                <div class="meta-box"><small>Boundary</small><strong>项目内自建、单人离线、仅作目标场景方向性验证</strong></div>
+              </div>
+
+              <div class="case-tabs" data-tabs>
+                <div class="tab-list" role="tablist" aria-label="阿德勒对话助手案例信息">
+                  <button class="tab-button" id="adler-tab-case" role="tab" aria-selected="true" aria-controls="adler-panel-case" tabindex="0">Case</button>
+                  <button class="tab-button" id="adler-tab-evidence" role="tab" aria-selected="false" aria-controls="adler-panel-evidence" tabindex="-1">Evidence</button>
+                  <button class="tab-button" id="adler-tab-boundary" role="tab" aria-selected="false" aria-controls="adler-panel-boundary" tabindex="-1">Boundary</button>
+                </div>
+                <div class="tab-panel active" id="adler-panel-case" role="tabpanel" aria-labelledby="adler-tab-case">
+                  <div class="case-grid">
+                    <div class="case-cell"><h4>Problem</h4><p>基线模型在特定心理学对话中存在理论堆砌、说教式表达和角色不稳定，需要把抽象原则变成可执行质量标准。</p></div>
+                    <div class="case-cell"><h4>Decision</h4><p>以目的论、课题分离和横向关系定义角色规则、回答结构与禁用语；选择 Doubao-1.5-pro-32k 基座完成两轮 SFT-LoRA。</p></div>
+                    <div class="case-cell"><h4>Artifact</h4><p>500 条对话数据、训练任务、五维评测标准、Badcase 迭代记录与 Dify 对话原型。</p></div>
+                    <div class="case-cell"><h4>Result</h4><p>项目内自建 55 条离线测试集，微调版本逐题胜出 55/55；这是单人、离线、目标场景的方向性验证，不是泛化准确率。</p></div>
+                  </div>
+                </div>
+                <div class="tab-panel" id="adler-panel-evidence" role="tabpanel" aria-labelledby="adler-tab-evidence" hidden>
+                  <div class="evidence-gallery">
+                    <figure class="evidence-card wide"><img src="assets/adler-chat.png" alt="阿德勒小助手对话界面，显示用户消息与直接回复" loading="lazy"><figcaption><strong>对话原型</strong>Dify 侧的对话体验与角色输出形态。</figcaption></figure>
+                    <figure class="evidence-card"><img src="assets/adler-evaluation.png" alt="阿德勒模型评测结果页面，显示模型对比与五维评测摘要" loading="lazy"><figcaption><strong>评测摘要</strong>同架构基线与微调版本的对比结果。</figcaption></figure>
+                    <figure class="evidence-card"><img src="assets/adler-gem.png" alt="阿德勒评测器自定义 Gem 界面，显示评测说明" loading="lazy"><figcaption><strong>评测器</strong>把五维标准转成可执行的评估入口。</figcaption></figure>
+                    <figure class="evidence-card"><img src="assets/adler-training.png" alt="模型精调任务页面，显示 SFT 训练任务完成" loading="lazy"><figcaption><strong>训练任务</strong>两轮 SFT-LoRA 的任务管理与模型产物入口。</figcaption></figure>
+                    <figure class="evidence-card wide"><img src="assets/adler-loss.png" alt="训练观察页面，显示 train/loss 和 eval/loss 曲线" loading="lazy"><figcaption><strong>训练观察</strong>记录 train/loss 与 eval/loss 变化，作为过程证据。</figcaption></figure>
+                  </div>
+                </div>
+                <div class="tab-panel" id="adler-panel-boundary" role="tabpanel" aria-labelledby="adler-tab-boundary" hidden>
+                  <div class="case-grid">
+                    <div class="case-cell"><h4>Verified</h4><ul><li>500 条对话数据、两轮 SFT-LoRA。</li><li>项目内自建 55 条离线评测。</li><li>微调模型已接入 Dify 对话小助手。</li></ul></div>
+                    <div class="case-cell"><h4>Not claimed</h4><ul><li>55/55 不写成广泛准确率或用户满意度。</li><li>不作为心理诊断、治疗或危机干预。</li><li>外部聊天链接不单独证明训练配置和线上效果。</li></ul></div>
+                  </div>
+                </div>
+              </div>
+              <div class="project-links"><a class="button primary" href="https://udify.app/chat/OUxvb05elr678Ll1" target="_blank" rel="noreferrer">打开聊天 Demo ↗</a></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="proof">
+      <div class="site-shell">
+        <div class="section-heading">
+          <div class="section-kicker">Proof Layer / 04</div>
+          <div>
+            <h2>把“做过”拆成可点击、可复查、可标注边界的证据层。</h2>
+            <p>招聘者可按证据状态筛选。事实强度不由页面视觉决定，而由入口类型、验证范围与缺失项共同决定。</p>
+          </div>
+        </div>
+
+        <div class="proof-controls" aria-label="证据筛选">
+          <button class="filter-button proof-filter" type="button" data-proof="all" aria-pressed="true">全部证据</button>
+          <button class="filter-button proof-filter" type="button" data-proof="reachable" aria-pressed="false">Reachable</button>
+          <button class="filter-button proof-filter" type="button" data-proof="replay" aria-pressed="false">Replay</button>
+          <button class="filter-button proof-filter" type="button" data-proof="offline" aria-pressed="false">Offline validation</button>
+          <button class="filter-button proof-filter" type="button" data-proof="pending" aria-pressed="false">Pending evidence</button>
+        </div>
+
+        <div class="proof-table" aria-live="polite">
+          <div class="proof-row" data-proof-type="replay">
+            <strong>AI PM Studio · 五角色流程回放</strong>
+            <span>交接 / 返工 / 导出</span>
+            <span class="status replay">Replay</span>
+            <a href="https://ai-pm-studio-cn-280236-7-1452182285.sh.run.tcloudbase.com/agent-demo" target="_blank" rel="noreferrer">Open ↗</a>
+          </div>
+          <div class="proof-row" data-proof-type="reachable">
+            <strong>自动化质检 · 流程可视化看板</strong>
+            <span>演示入口</span>
+            <span class="status reachable">Reachable demo</span>
+            <a href="https://ai-qa-workflow-cn-280236-7-1452182285.sh.run.tcloudbase.com/" target="_blank" rel="noreferrer">Open ↗</a>
+          </div>
+          <div class="proof-row" data-proof-type="reachable">
+            <strong>倪海厦知识图谱 · 公开网页</strong>
+            <span>网页产品入口</span>
+            <span class="status reachable">Reachable site</span>
+            <a href="https://www.nihaixia-knowledge.xyz/" target="_blank" rel="noreferrer">Open ↗</a>
+          </div>
+          <div class="proof-row" data-proof-type="reachable">
+            <strong>阿德勒对话助手 · 外部聊天入口</strong>
+            <span>SFT-LoRA 方向</span>
+            <span class="status external">External chat</span>
+            <a href="https://udify.app/chat/OUxvb05elr678Ll1" target="_blank" rel="noreferrer">Open ↗</a>
+          </div>
+          <div class="proof-row" data-proof-type="offline">
+            <strong>倪海厦 · 本地回归验证</strong>
+            <span>v5.5.x · 146/146</span>
+            <span class="status offline">Offline validation</span>
+            <a href="https://github.com/zenoyang-ai/nihaixia-knowledge-graph" target="_blank" rel="noreferrer">Repo ↗</a>
+          </div>
+          <div class="proof-row" data-proof-type="offline">
+            <strong>阿德勒 · 项目内自建评测</strong>
+            <span>55/55 · 单人离线 · 方向性验证</span>
+            <span class="status offline">Offline evidence</span>
+            <a href="#work">Case ↗</a>
+          </div>
+          <div class="proof-row" data-proof-type="pending">
+            <strong>Resume PDF</strong>
+            <span>最终投递版文件</span>
+            <span class="status pending">Pending evidence</span>
+            <span class="button ghost pending-control" role="status">待补 PDF</span>
+          </div>
+          <div class="proof-row" data-proof-type="reachable">
+            <strong>GitHub profile</strong>
+            <span>公开仓库与工程痕迹</span>
+            <span class="status reachable">Reachable</span>
+            <a href="https://github.com/zenoyang-ai" target="_blank" rel="noreferrer">Open ↗</a>
+          </div>
+          <div class="proof-row" data-proof-type="reachable">
+            <strong>Contact</strong>
+            <span>公开邮箱入口</span>
+            <span class="status reachable">Available</span>
+            <a href="mailto:2574720892@qq.com">Email ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="method">
+      <div class="site-shell">
+        <div class="section-heading">
+          <div class="section-kicker">Working Method / 05</div>
+          <div>
+            <h2>从业务判断到证据交付，用同一条闭环推进。</h2>
+            <p>这个模块不是“技能关键词”，而是招聘者可用来判断你如何工作的过程信号。</p>
+          </div>
+        </div>
+        <div class="method-grid">
+          <article class="method-step"><span class="step-no">01</span><div><h3>问题与用户</h3><p>先确定真实场景、决策对象、成功条件与不做什么。</p></div></article>
+          <article class="method-step"><span class="step-no">02</span><div><h3>方案与边界</h3><p>判断 Agent、RAG、工作流或微调是否必要，并明确人工 Gate。</p></div></article>
+          <article class="method-step"><span class="step-no">03</span><div><h3>原型与交付物</h3><p>把 PRD、用户流程、原型、Tool/Workflow 结构转成可查看 Artifact。</p></div></article>
+          <article class="method-step"><span class="step-no">04</span><div><h3>评测与 Badcase</h3><p>记录基线、样本范围、失败类型、修复动作和复测方式。</p></div></article>
+          <article class="method-step"><span class="step-no">05</span><div><h3>证据与复盘</h3><p>区分可访问入口、Replay、离线验证和待补证据，不把方向性结果包装成生产成功。</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="playground">
+      <div class="site-shell">
+        <div class="section-heading">
+          <div class="section-kicker">Playground / 06</div>
+          <div>
+            <h2>一个不冒充真实运行的 Sample Agent Trace。</h2>
+            <p>这是页面内的交互示例，用来说明五角色链路和人工 Gate 的信息呈现方式；它不是在线模型、真实任务记录或性能证明。</p>
+          </div>
+        </div>
+
+        <div class="playground">
+          <div class="trace-map">
+            <div class="trace-head"><h3>Run map</h3><span id="traceCounter">STEP 01 / 05</span></div>
+            <ol class="trace-list" id="traceList" role="tablist" aria-label="示例 Agent 阶段">
+              <li><button class="trace-step active" id="trace-step-0" role="tab" aria-selected="true" aria-current="step" aria-controls="trace-detail-panel" tabindex="0" type="button" data-step="0"><small>ROLE 01</small>需求澄清</button></li>
+              <li><button class="trace-step" id="trace-step-1" role="tab" aria-selected="false" aria-controls="trace-detail-panel" tabindex="-1" type="button" data-step="1"><small>ROLE 02</small>证据研究</button></li>
+              <li><button class="trace-step" id="trace-step-2" role="tab" aria-selected="false" aria-controls="trace-detail-panel" tabindex="-1" type="button" data-step="2"><small>ROLE 03</small>产品方案</button></li>
+              <li><button class="trace-step" id="trace-step-3" role="tab" aria-selected="false" aria-controls="trace-detail-panel" tabindex="-1" type="button" data-step="3"><small>ROLE 04</small>受限原型</button></li>
+              <li><button class="trace-step" id="trace-step-4" role="tab" aria-selected="false" aria-controls="trace-detail-panel" tabindex="-1" type="button" data-step="4"><small>ROLE 05</small>评审与返工</button></li>
+            </ol>
+          </div>
+          <div class="trace-detail" id="trace-detail-panel" role="tabpanel" aria-labelledby="trace-step-0" aria-live="polite" tabindex="0">
+            <div class="trace-head"><h3>Trace detail</h3><span>Sample / Offline</span></div>
+            <div class="trace-body">
+              <span class="status offline">Offline interaction</span>
+              <h3 id="traceTitle">需求澄清</h3>
+              <p id="traceDescription">把模糊想法转成用户、场景、目标、约束和待确认问题。只提出会改变方案的问题，并标记仍缺失的事实。</p>
+              <div class="trace-facts">
+                <div class="trace-fact"><small>INPUT</small><strong id="traceInput">产品想法与已有材料</strong></div>
+                <div class="trace-fact"><small>OUTPUT</small><strong id="traceOutput">问题定义 / 约束 / 待确认项</strong></div>
+                <div class="trace-fact"><small>HUMAN GATE</small><strong id="traceGate">确认目标与范围</strong></div>
+                <div class="trace-fact"><small>EVIDENCE</small><strong id="traceEvidence">澄清记录与版本化 Artifact</strong></div>
+              </div>
+              <div class="trace-controls">
+                <button class="button" type="button" id="tracePrev">← 上一步</button>
+                <button class="button primary" type="button" id="traceNext">下一步 →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="notes">
+      <div class="site-shell">
+        <div class="section-heading">
+          <div class="section-kicker">Notes / 07</div>
+          <div>
+            <h2>把一次项目经验，沉淀成可复用的产品判断。</h2>
+            <p>首版只放选题草案，不伪造已发表文章。后续建议每篇都附项目来源、反例和可复查证据。</p>
+          </div>
+        </div>
+        <div class="notes-grid">
+          <article class="note-card"><span class="status pending">Draft topic</span><h3>什么时候该用 Agent，什么时候工作流更可靠？</h3><p>从任务不确定性、工具权限、人工确认和失败成本四个维度判断。</p></article>
+          <article class="note-card"><span class="status pending">Draft topic</span><h3>评测不是一个通过率：如何组织 Badcase、复测与 UAT。</h3><p>把离线结果、单人对比、方向性收益与线上业务结果分开表达。</p></article>
+          <article class="note-card"><span class="status pending">Draft topic</span><h3>产品型 FDE 的边界：从 POC 到可交付，还缺哪些证据？</h3><p>讨论客户现场、系统集成、监控、SLA、培训与运维证据如何补齐。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="site-shell">
+        <div class="section-heading">
+          <div class="section-kicker">Contact / 08</div>
+          <div><h2>如果你在找能把 AI 方案推进到可验证交付的人，可以从这里联系我。</h2></div>
+        </div>
+        <div class="about-grid">
+          <p class="about-copy">我更关注怎样把<span class="inline-pill">复杂业务问题</span>拆成可验证的产品方案：明确用户与边界，设计流程与原型，推进 Agent / RAG / 自动化工作流，并用评测、Badcase、UAT 和证据包支撑复盘。对于客户现场交付、独立系统集成、生产监控、SLA 与商业结果，网站只展示已有事实，不提前包装成充分经验。</p>
+          <aside class="contact-panel">
+            <span class="mono-label">Availability</span>
+            <p>目标方向：AI 产品经理 / AI 应用产品经理；相邻方向：产品型 FDE、AI 应用交付、解决方案。</p>
+            <div class="contact-list">
+              <span class="pending-control" role="status"><span>Resume</span><small>最终 PDF 待补</small></span>
+              <a href="https://github.com/zenoyang-ai" target="_blank" rel="noreferrer"><span>GitHub</span><small>公开主页 ↗</small></a>
+              <a href="mailto:2574720892@qq.com"><span>Email</span><small>2574720892@qq.com ↗</small></a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-shell footer">
+    <span>杨圣旦 · AI Product Fieldbook · Personal site demo v0.2</span>
+    <span>Built as a single offline HTML · 2026-08-05</span>
+  </footer>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const themeToggle = document.getElementById('themeToggle');
+      let savedTheme = null;
+      try { savedTheme = localStorage.getItem('fieldbook-theme'); } catch (_) { /* offline/opaque origin */ }
+      if (savedTheme === 'paper' || savedTheme === 'ink') root.dataset.theme = savedTheme;
+      themeToggle.setAttribute('aria-pressed', String(root.dataset.theme === 'paper'));
+      themeToggle.addEventListener('click', () => {
+        root.dataset.theme = root.dataset.theme === 'ink' ? 'paper' : 'ink';
+        themeToggle.setAttribute('aria-pressed', String(root.dataset.theme === 'paper'));
+        try { localStorage.setItem('fieldbook-theme', root.dataset.theme); } catch (_) { /* theme still works */ }
+      });
+
+      const main = document.getElementById('main');
+      document.querySelector('.skip-link').addEventListener('click', () => {
+        window.setTimeout(() => main.focus(), 0);
+      });
+
+      document.querySelectorAll('[data-tabs]').forEach((tabs) => {
+        const buttons = [...tabs.querySelectorAll('.tab-button')];
+        const panels = [...tabs.querySelectorAll('.tab-panel')];
+        const activateTab = (index) => {
+          buttons.forEach((item, i) => {
+            const active = i === index;
+            item.setAttribute('aria-selected', String(active));
+            item.setAttribute('tabindex', active ? '0' : '-1');
+          });
+          panels.forEach((panel, i) => {
+            const active = i === index;
+            panel.hidden = !active;
+            panel.classList.toggle('active', active);
+          });
+        };
+        buttons.forEach((button, index) => {
+          button.addEventListener('click', () => activateTab(index));
+          button.addEventListener('keydown', (event) => {
+            if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+            event.preventDefault();
+            const offset = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+            const next = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : (index + offset + buttons.length) % buttons.length;
+            buttons[next].focus();
+            activateTab(next);
+          });
+        });
+        activateTab(buttons.findIndex((button) => button.getAttribute('aria-selected') === 'true'));
+      });
+
+      const projectFilters = [...document.querySelectorAll('[data-filter]')];
+      const projects = [...document.querySelectorAll('.project')];
+      projectFilters.forEach((button) => {
+        button.addEventListener('click', () => {
+          const filter = button.dataset.filter;
+          projectFilters.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+          projects.forEach((project) => {
+            project.hidden = filter !== 'all' && project.dataset.category !== filter;
+          });
+        });
+      });
+
+      const proofFilters = [...document.querySelectorAll('.proof-filter')];
+      const proofRows = [...document.querySelectorAll('.proof-row')];
+      proofFilters.forEach((button) => {
+        button.addEventListener('click', () => {
+          const filter = button.dataset.proof;
+          proofFilters.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+          proofRows.forEach((row) => {
+            row.hidden = filter !== 'all' && row.dataset.proofType !== filter;
+          });
+        });
+      });
+
+      const traceData = [
+        {
+          title: '需求澄清',
+          description: '把模糊想法转成用户、场景、目标、约束和待确认问题。只提出会改变方案的问题，并标记仍缺失的事实。',
+          input: '产品想法与已有材料',
+          output: '问题定义 / 约束 / 待确认项',
+          gate: '确认目标与范围',
+          evidence: '澄清记录与版本化 Artifact'
+        },
+        {
+          title: '证据研究',
+          description: '整理已有事实、公开材料、竞品与风险来源；将已验证信息和假设分开，避免把常识补全当成项目事实。',
+          input: '已确认问题与资料清单',
+          output: '证据表 / 假设表 / 缺口',
+          gate: '确认可引用事实',
+          evidence: '来源、范围与时间戳'
+        },
+        {
+          title: '产品方案',
+          description: '形成用户流程、MVP、人工 Gate、异常路径和验收方式。AI 能力只在能降低成本或提升体验时进入方案。',
+          input: '问题定义与证据',
+          output: '方案 / 用户流程 / 验收',
+          gate: '批准 MVP 与边界',
+          evidence: 'PRD / 流程图 / 决策记录'
+        },
+        {
+          title: '受限原型',
+          description: '将关键路径转成可操作原型或工作流，优先验证高风险假设；明确哪些是真实能力、模拟数据和静态回放。',
+          input: '批准后的产品方案',
+          output: 'Demo / Workflow / Artifact',
+          gate: '确认演示范围',
+          evidence: '运行入口与限制说明'
+        },
+        {
+          title: '评审与返工',
+          description: '围绕事实、体验、技术可行性、评测与安全边界复查。问题进入返工，确认后导出可交付的证据包。',
+          input: '原型与证据包',
+          output: '问题清单 / 修订 / 导出',
+          gate: '最终确认与发布',
+          evidence: 'Replay / 变更记录 / 边界声明'
+        }
+      ];
+
+      let currentTrace = 0;
+      const traceButtons = [...document.querySelectorAll('.trace-step')];
+      const traceTitle = document.getElementById('traceTitle');
+      const traceDescription = document.getElementById('traceDescription');
+      const traceInput = document.getElementById('traceInput');
+      const traceOutput = document.getElementById('traceOutput');
+      const traceGate = document.getElementById('traceGate');
+      const traceEvidence = document.getElementById('traceEvidence');
+      const traceCounter = document.getElementById('traceCounter');
+      const tracePanel = document.getElementById('trace-detail-panel');
+      const renderTrace = (index) => {
+        currentTrace = (index + traceData.length) % traceData.length;
+        const item = traceData[currentTrace];
+        traceButtons.forEach((button, i) => {
+          const active = i === currentTrace;
+          button.classList.toggle('active', active);
+          button.setAttribute('aria-selected', String(active));
+          button.setAttribute('tabindex', active ? '0' : '-1');
+          if (active) button.setAttribute('aria-current', 'step');
+          else button.removeAttribute('aria-current');
+        });
+        tracePanel.setAttribute('aria-labelledby', traceButtons[currentTrace].id);
+        traceTitle.textContent = item.title;
+        traceDescription.textContent = item.description;
+        traceInput.textContent = item.input;
+        traceOutput.textContent = item.output;
+        traceGate.textContent = item.gate;
+        traceEvidence.textContent = item.evidence;
+        traceCounter.textContent = `STEP ${String(currentTrace + 1).padStart(2, '0')} / 05`;
+      };
+      traceButtons.forEach((button, index) => {
+        button.addEventListener('click', () => renderTrace(Number(button.dataset.step)));
+        button.addEventListener('keydown', (event) => {
+          if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+          event.preventDefault();
+          const offset = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+          const next = event.key === 'Home' ? 0 : event.key === 'End' ? traceButtons.length - 1 : (index + offset + traceButtons.length) % traceButtons.length;
+          traceButtons[next].focus();
+          renderTrace(next);
+        });
+      });
+      document.getElementById('tracePrev').addEventListener('click', () => renderTrace(currentTrace - 1));
+      document.getElementById('traceNext').addEventListener('click', () => renderTrace(currentTrace + 1));
+
+      document.addEventListener('keydown', (event) => {
+        if (event.target.matches('input, textarea, select, button, a')) return;
+        if (event.key.toLowerCase() === 'w') document.getElementById('work').scrollIntoView();
+        if (event.key.toLowerCase() === 'p') document.getElementById('proof').scrollIntoView();
+        if (event.key.toLowerCase() === 'm') document.getElementById('method').scrollIntoView();
+      });
+    })();
+  </script>
+</body>
+</html>
